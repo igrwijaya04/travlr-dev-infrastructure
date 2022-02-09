@@ -1,0 +1,104 @@
+version: "3.9"
+
+services:
+  seq:
+    image: datalust/seq:latest
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:80
+  redis:
+    restart: always
+    image: redis:6.0.1
+    ports:
+      - 6379:6379
+    networks:
+      - travlr
+
+  rabbitmq:
+    restart: always
+    image: rabbitmq:3.8-management-alpine
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=1WqgH8N2v1qDBDZDbNy8Bg9IkPWLEpu79m6q+0t36lQ=
+    ports:
+      - 15672:15672
+      - 5672:5672
+    networks:
+      - travlr
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
+    restart: always
+    volumes:
+      - D:/Workspace/Infrastructure/DockerVolume/elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - travlr
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.15.0
+    restart: always
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - travlr
+
+  apm:
+    image: docker.elastic.co/apm/apm-server:7.15.0
+    restart: always
+    volumes:
+      - ./configs/apm-server.yml:/usr/share/apm-server/apm-server.yml
+    environment:
+      - output.elasticsearch.hosts=http://elasticsearch:9200
+      - BEAT_STRICT_PERMS=false
+    ports:
+      - "8200:8200"
+    depends_on:
+      - elasticsearch
+    networks:
+      - travlr
+
+  mysql:
+    image: mysql:8.0.1
+    hostname: db
+    restart: always
+    volumes:
+      - D:/Workspace/Infrastructure/DockerVolume/MySql801:/var/lib/mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=root"
+    ports:
+      - 3306:3306
+    networks:
+      - travlr
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    ports:
+      - 9001:80
+    networks:
+      - travlr
+    environment:
+      - "UPLOAD_LIMIT=2G"
+      - "PMA_HOST=db"
+      - "PMA_PASSWORD=root"
+    depends_on:
+      - mysql
+
+networks:
+  travlr:
+    driver: bridge
