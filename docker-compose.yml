@@ -73,11 +73,11 @@ services:
       - travlr
 
   mysql:
-    image: mysql:8.0.1
+    image: mysql:5.7
     hostname: db
     restart: always
     volumes:
-      - D:/Workspace/Infrastructure/DockerVolume/MySql801:/var/lib/mysql
+      - D:/Workspace/Infrastructure/DockerVolume/MySql57:/var/lib/mysql
     environment:
       - "MYSQL_ROOT_PASSWORD=root"
     ports:
