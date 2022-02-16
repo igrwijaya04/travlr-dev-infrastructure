@@ -25,6 +25,7 @@
     - Open terminal and run command: 
       ``choco install -y python2``
       ``npm i -g windows-build-tools``
+      ``choco install nodejs --version=14.19.0``
     - If you are using Powershell to running the yarn command, you need to execute this command first (one time):
       ``Set-ExecutionPolicy Unrestricted``
 - Configure AWS cli
