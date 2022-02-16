@@ -28,6 +28,7 @@
       ``choco install nodejs --version=14.19.0``
     - If you are using Powershell to running the yarn command, you need to execute this command first (one time):
       ``Set-ExecutionPolicy Unrestricted``
+    - run npm install --global yarn
 - Configure AWS cli
   - Open terminal and run command:
     ``aws configure --profile travlr``
