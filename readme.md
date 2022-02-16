@@ -35,3 +35,6 @@
     Please ask your team mate for the ``Access Key`` and ``Secret Key``
 - Configure kubetcl cli (Kubernetes Cluster)
   We use kubectl to port forwarding our services in the AWS to our local machine. So we can use our services from our local machine.
+  
+  
+  choco install kubernetes-cli
