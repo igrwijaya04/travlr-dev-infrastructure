@@ -38,3 +38,5 @@
   
   
   choco install kubernetes-cli
+  install openVPN
+  download development database
