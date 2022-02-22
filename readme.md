@@ -40,3 +40,4 @@
   choco install kubernetes-cli
   install openVPN
   download development database
+  dotnet tool install --global dotnet-ef
