@@ -30,7 +30,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
     restart: always
     volumes:
-      - D:/Workspace/Infrastructure/DockerVolume/elasticsearch:/usr/share/elasticsearch/data
+      - F:/Travlr/Infrastructure/DockerVolume/elasticsearch:/usr/share/elasticsearch/data
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - discovery.type=single-node
@@ -77,7 +77,7 @@ services:
     hostname: db
     restart: always
     volumes:
-      - D:/Workspace/Infrastructure/DockerVolume/MySql57:/var/lib/mysql
+      - F:/Travlr/Infrastructure/DockerVolume/MySql57:/var/lib/mysql
     environment:
       - "MYSQL_ROOT_PASSWORD=root"
     ports:
@@ -99,6 +99,41 @@ services:
     depends_on:
       - mysql
 
+  caddy:
+    image: caddy:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "9000:9000"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - C:/Users/igrwi/Workspace/Travlr/thebalibible:/app/public/tbb
+      - C:/Users/igrwi/Workspace/Travlr/thebalibible-cms:/app/public/tbb-cms
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - php-web
+    depends_on:
+      - php-fpm
+
+  php-fpm:
+    container_name: php-fpm
+    build:
+      context: .
+      dockerfile: TravlrPHP.Dockerfile
+    volumes:
+      - C:/Users/igrwi/Workspace/Travlr/thebalibible:/app/public/tbb
+      - C:/Users/igrwi/Workspace/Travlr/thebalibible-cms:/app/public/tbb-cms
+    networks:
+      - php-web
+
 networks:
   travlr:
     driver: bridge
+  php-web:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
