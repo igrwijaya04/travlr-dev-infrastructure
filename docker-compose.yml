@@ -30,7 +30,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
     restart: always
     volumes:
-      - F:/Travlr/Infrastructure/DockerVolume/elasticsearch:/usr/share/elasticsearch/data
+      - C:/Users/igrwi/Workspace/Infrastructure/DockerVolume/elasticsearch:/usr/share/elasticsearch/data
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - discovery.type=single-node
@@ -76,8 +76,9 @@ services:
     image: mysql:5.7
     hostname: db
     restart: always
+    command: --max_allowed_packet=1073741824
     volumes:
-      - F:/Travlr/Infrastructure/DockerVolume/MySql57:/var/lib/mysql
+      - C:/Users/igrwi/Workspace/Infrastructure/DockerVolume/MySql57:/var/lib/mysql
     environment:
       - "MYSQL_ROOT_PASSWORD=root"
     ports:
@@ -108,8 +109,8 @@ services:
       - "9000:9000"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
-      - C:/Users/igrwi/Workspace/Travlr/thebalibible:/app/public/tbb
-      - C:/Users/igrwi/Workspace/Travlr/thebalibible-cms:/app/public/tbb-cms
+      - C:/Users/igrwi/Workspace/TRAVLR/Repo/thebalibible:/app/public/tbb
+      - C:/Users/igrwi/Workspace/TRAVLR/Repo/thebalibible-cms:/app/public/tbb-cms
       - caddy_data:/data
       - caddy_config:/config
     networks:
@@ -123,8 +124,8 @@ services:
       context: .
       dockerfile: TravlrPHP.Dockerfile
     volumes:
-      - C:/Users/igrwi/Workspace/Travlr/thebalibible:/app/public/tbb
-      - C:/Users/igrwi/Workspace/Travlr/thebalibible-cms:/app/public/tbb-cms
+      - C:/Users/igrwi/Workspace/TRAVLR/Repo/thebalibible:/app/public/tbb
+      - C:/Users/igrwi/Workspace/TRAVLR/Repo/thebalibible-cms:/app/public/tbb-cms
     networks:
       - php-web
 
